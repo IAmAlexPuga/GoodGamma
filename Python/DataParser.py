@@ -63,7 +63,7 @@ def printFile(file):
         out.write(line + '\n')
         fileLineCount += 1
         if(fileLineCount % 10000 == 0):
-            print("Current Line: " + fileLineCount)
+            print("Current Line: " + str(fileLineCount))
     print(fileLineCount)
 
 main()
