@@ -40,7 +40,7 @@ def isNewTable(line):
     for table in tables:
         cmpr = table.lower()
         if newTable in llower and cmpr in llower:
-            print("Table found: " + table)
+            print("Table found: " + table + " at count " + str(COUNT))
             return True
     return False
 
