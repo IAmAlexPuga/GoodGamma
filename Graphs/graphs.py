@@ -62,7 +62,7 @@ def gameRecommendationUser():
   if not userGenres:
     userGenres = " Genre=\'Action\' "
 
-  cur.execute('select Title, Rating, Price from app_id_info natural join games_genres where Type=\'game\' and ' + userGenres +' order by Rating asc limit ' + str(LIMIT))
+  cur.execute('select Title, Rating, Price from app_id_info natural join games_genres where Type=\'game\' and ' + userGenres +' order by Rating desc limit 10')
   rows = cur.fetchall()
   titles = []
   ratings = []
