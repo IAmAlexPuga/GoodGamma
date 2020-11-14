@@ -12,7 +12,7 @@ def main():
 
   print(cur)
 
-  #showBestRatings()
+  showBestRatings()
   #showMostPurchased()
   #showPricePoints()
   cur.close()
@@ -47,21 +47,32 @@ def userRecGenres():
       if userIn > 0 and userIn <= count:
         if first:
           userGenres += 'Genre=\'' + item[0] + '\' '
+          first = False
         else:
           userGenres += 'or Genre=\'' + item[0] + '\' '
+        count = 1
 
   return userGenres
 
 
-
-
-
-
-
-  return str(rows[int(input()) - 1][0])
-
 def gameRecommendationUser():
   userGenres = userRecGenres()
+
+  if not userGenres:
+    userGenres = " Genre=\'Action\' "
+
+  cur.execute('select Title, Rating, Price from app_id_info natural join games_genres where Type=\'game\' and ' + userGenres +' order by Rating asc limit ' + str(LIMIT))
+  rows = cur.fetchall()
+  titles = []
+  ratings = []
+  prices = []
+
+  for (title, rating, price) in rows:
+    titles.append(title)
+    ratings.append(rating)
+    prices.append(price)
+
+
 
 def showPricePoints():
   cur.execute('select Price , count(Price) as numGamesPriced from app_id_info where Price < 100 group by Price order by Price asc')
@@ -95,8 +106,6 @@ def showMostPurchasedContentSelection():
 
 def showMostPurchased():
 
-
-
   userInput = showMostPurchasedContentSelection()
 
   if userInput == None:
@@ -112,7 +121,7 @@ def showMostPurchased():
     names.append(id)
     purchases.append(purchase)
 
-  showGraphBar(names,purchases, title="Most Purchased "+userInput.capitalize(), tX= userInput.capitalize() + " Name", tY="Purchases", subT="2016", heightSpacing=1)
+  showGraphBar(names,purchases, title="Most Purchased "+userInput.capitalize(), tX= userInput.capitalize() + " Name", tY="Purchases", subT="2016", heightSpacing=1, price=None)
 
 
 def showBestRatings():
@@ -125,7 +134,7 @@ def showBestRatings():
     names.append(name)
     ratings.append(rating)
 
-  showGraphBar(names,ratings, title="Best Rated Games", tX="Game Name", tY="Rating", subT="2016", heightSpacing=1.05)
+  showGraphBar(names,ratings, title="Best Rated Games", tX="Game Name", tY="Rating", subT="2016", heightSpacing=1.05, price=None)
 
 
 def showScatterPlot(x,y, title, tX, tY, subT, avg):
@@ -144,7 +153,7 @@ def showScatterPlot(x,y, title, tX, tY, subT, avg):
   plt.show()
 
 
-def showGraphBar(x,y, title, tX, tY, subT, heightSpacing):
+def showGraphBar(x,y, title, tX, tY, subT, heightSpacing, price):
   x = np.array(x)
   y = np.array(y)
   fig, ax = plt.subplots()
@@ -156,9 +165,14 @@ def showGraphBar(x,y, title, tX, tY, subT, heightSpacing):
   plt.suptitle(subT)
 
   # shows the value of the bar
+  count = 0
   for rect in rects:
     height = rect.get_height() - 4
     ax.text(rect.get_x() + rect.get_width() / 2., heightSpacing * height,'%d' % int(height),ha='center', va='bottom')
+    if not (price is None):
+      ax.text(rect.get_x() + rect.get_width() / 2., 1, '%d' % int(height), ha='center',
+              va='bottom')
+
   namesSpaced = ['\n'.join(wrap(i,12)) for i in x ]
   plt.xticks(x, namesSpaced, rotation=90)
 
