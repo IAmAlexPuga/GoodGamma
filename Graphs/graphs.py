@@ -13,7 +13,7 @@ def main():
   print(cur)
 
   #showBestRatings()
-  showMostPurchased()
+  #showMostPurchased()
   #showPricePoints()
   cur.close()
 
@@ -26,6 +26,42 @@ def printMenu():
   print("3: Game Recommendation: User")
   print("4: Game Recommendation: Business")
   print("5: Price Points")
+
+def userRecGenres():
+  cur.execute('select Genre from games_genres group by Genre')
+  rows = cur.fetchall()
+  count = 1
+  userGenres = ""
+  userIn = ""
+  first = True
+  while userIn != "q" or userIn != "quit":
+    print("What kind of genres are you looking for?")
+    for item in rows:
+      if not(item in userIn):
+        print(str(count) + ". " + item[0])
+        count += 1
+
+    userIn = input()
+    if userIn != "q" or userIn != "quit":
+      userIn = int(input())
+      if userIn > 0 and userIn <= count:
+        if first:
+          userGenres += 'Genre=\'' + item[0] + '\' '
+        else:
+          userGenres += 'or Genre=\'' + item[0] + '\' '
+
+  return userGenres
+
+
+
+
+
+
+
+  return str(rows[int(input()) - 1][0])
+
+def gameRecommendationUser():
+  userGenres = userRecGenres()
 
 def showPricePoints():
   cur.execute('select Price , count(Price) as numGamesPriced from app_id_info where Price < 100 group by Price order by Price asc')
