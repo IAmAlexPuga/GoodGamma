@@ -35,22 +35,22 @@ def userRecGenres():
   userGenres = ""
   userIn = ""
   first = True
-  while userIn != "q" or userIn != "quit":
+  while userIn != "q" and userIn != "quit":
     print("What kind of genres are you looking for?")
     for item in rows:
-      if not(item in userIn):
+      if not(str(item[0]) in userGenres):
         print(str(count) + ". " + item[0])
         count += 1
 
     userIn = input()
-    if userIn != "q" or userIn != "quit":
-      userIn = int(input())
+    if str(userIn) != "q":
+      userIn = int(userIn)
       if userIn > 0 and userIn <= count:
         if first:
-          userGenres += 'Genre=\'' + item[0] + '\' '
+          userGenres += 'Genre=\'' + str(item[0]) + '\' '
           first = False
         else:
-          userGenres += 'or Genre=\'' + item[0] + '\' '
+          userGenres += 'or Genre=\'' + str(item[0]) + '\' '
         count = 1
 
   return userGenres
@@ -73,7 +73,7 @@ def gameRecommendationUser():
     ratings.append(rating)
     prices.append(price)
 
-  showGraphBar(title,rating, tX="Game Titles", tY="Rating", subT="2016", heightSpacing=1.05, prices=prices)
+  showGraphBar(title,rating, title="Recommended Games", tX="Game Titles", tY="Rating", subT="2016", heightSpacing=1.05, price=prices)
 
 
 
@@ -176,11 +176,17 @@ def showGraphBar(x,y, title, tX, tY, subT, heightSpacing, price):
       ax.text(rect.get_x() + rect.get_width() / 2., 1, '%d' % int(height), ha='center',
               va='bottom')
 
-  namesSpaced = ['\n'.join(wrap(i,12)) for i in x ]
-  plt.xticks(x, namesSpaced, rotation=90)
+
+  if x.size > 1:
+    namesSpaced = ['\n'.join(wrap(i, 12)) for i in x]
+    plt.xticks(x, namesSpaced, rotation=90)
+    fig.tight_layout()
 
 
-  fig.tight_layout()
+
+
+
+
   #plt.tight_layout()
   plt.show()
 
