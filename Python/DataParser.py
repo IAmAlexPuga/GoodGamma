@@ -11,6 +11,7 @@ tables = \
 'Games_1',
 'Games_2']
 
+lastCount = 139165
 COUNT = 0
 
 newTable = ("-- Table structure for table ").lower()
@@ -22,7 +23,7 @@ def main():
     #change to path of steam.sql file
     COUNT = 0
 
-    printFile("E:\\steamData\\steam.sql")
+    printFile2("E:\\steamData\\steam.sql")
 
 def openNewFile(out):
     global COUNT
@@ -65,5 +66,53 @@ def printFile(file):
         if(fileLineCount % 10000 == 0):
             print("Current Line: " + str(fileLineCount))
     print(fileLineCount)
+
+
+def printFile2(file):
+    global COUNT
+    COUNT  = 223
+    fileLineCount = 0
+    f = open(file, "r", encoding='utf8')
+    out = open('D:\\scriptOut\\test' + str(COUNT) + '.sql', 'w')
+    initFile(out)
+    fileByteCount = 0
+    for line in f:
+
+        if fileLineCount >= 139165:
+            if len(line) + fileByteCount > MAXSIZE or isNewTable(line):
+                COUNT += 1
+                out = openNewFile(out)
+                initFile(out)
+                fileByteCount = 0
+            # print(line)
+            fileByteCount += len(line)
+
+            line = parseData(line)
+            out.write(line + '\n')
+            fileLineCount += 1
+            if (fileLineCount % 10000 == 0):
+                print("Current Line: " + str(fileLineCount))
+        fileLineCount += 1
+
+    print(fileLineCount)
+
+
+def parseData(line):
+    #lines = line.split(' ',4)
+    #source = lines[-1]
+    #reGroup = lines[0] + " " + lines[1] + " " + lines[2] + " "  + lines[3]
+    #sourceArr = source.split(',')
+    #sarr = [lines[-1]]
+
+    for item in line:
+        if '\x8f' in item:
+            item = 'd'
+
+    #for item in sourceArr:
+        #reGroup += +  " " + str(item)
+    return line
+
+
+
 
 main()
