@@ -15,6 +15,7 @@ def main():
   showBestRatings()
   #showMostPurchased()
   #showPricePoints()
+  gameRecommendationUser()
   cur.close()
 
 
@@ -71,6 +72,8 @@ def gameRecommendationUser():
     titles.append(title)
     ratings.append(rating)
     prices.append(price)
+
+  showGraphBar(title,rating, tX="Game Titles", tY="Rating", subT="2016", heightSpacing=1.05, prices=prices)
 
 
 
