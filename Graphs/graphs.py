@@ -15,9 +15,57 @@ def main():
   #showBestRatings()
   #showMostPurchased()
   #showPricePoints()
-  gameRecommendationUser()
+  #gameRecommendationUser()
+  gameRecommendationBusiness()
   cur.close()
 
+
+def gameRecommendationBusiness():
+  mostPurchasedGames = "select appid, count(appid) as purchases, Price from games_2 natural join app_id_info  where Type = 'game' group by Title order by purchases desc limit 10"
+  mostPurchaseddlcs = "select appid, count(appid) as purchases, Price from games_2 natural join app_id_info  where Type = 'dlc' group by Title order by purchases desc limit 10"
+
+  cur.execute(mostPurchaseddlcs)
+  dlcData = cur.fetchall()
+
+  cur.execute(mostPurchasedGames)
+  gameData = cur.fetchall()
+
+  # top 10 game revenue combined
+  gameRev = 0
+  # top 10 dlc revenue combined
+  dlcRev = 0
+
+  ids = ""
+  first = True
+  for (appid, purchases, price) in gameData:
+    if first:
+      ids += " appid='" + str(appid) + "'"
+      first = False
+    else:
+      ids += " or appid='" + str(appid) + "'"
+    gameRev += (purchases * price)
+
+
+  for (appid, purchases, price) in dlcData:
+    ids += " or appid='" + str(appid) + "'"
+    dlcRev += (purchases * price)
+
+  # Unique genres from games and dlc
+
+  genres = "select Genre from games_genres where appid='10' or appid='30' or appid='40' or appid='50' or appid='130' or appid='240' or appid='340' or appid='220' or appid='80' or appid='440' or appid='9070' or appid='8660' or appid='201310' or appid='65720' or appid='57600' or appid='65700' or appid='229660' or appid='8690' or appid='44660' or appid='57730' group by Genre"
+
+  cur.execute(genres)
+  rows = cur.fetchall()
+
+
+  # Maybe store these results in a file so that we dont have to execute query. Takes a while to grab data
+  # prints all the unique genres of the top selling games/dlc
+  print("Recommended genres for businesses")
+  for genre in rows:
+    print(genre[0])
+
+  print("Revenue from top 10 Games: " + str("{:.2f}".format(gameRev)))
+  print("Revenue from top 10 DLCs: " + str("{:.2f}".format(dlcRev)))
 
 
 def printMenu():
