@@ -12,7 +12,7 @@ def main():
 
   print(cur)
 
-  showBestRatings()
+  #showBestRatings()
   #showMostPurchased()
   #showPricePoints()
   gameRecommendationUser()
@@ -44,13 +44,14 @@ def userRecGenres():
 
     userIn = input()
     if str(userIn) != "q":
-      userIn = int(userIn)
-      if userIn > 0 and userIn <= count:
+      userIn = int(userIn) - 1
+      if userIn >= 0 and userIn <= count:
         if first:
-          userGenres += 'Genre=\'' + str(item[0]) + '\' '
+          userGenres = 'Genre=\'' + str(rows[userIn][0]) + '\' '
+          rows.pop(userIn)
           first = False
         else:
-          userGenres += 'or Genre=\'' + str(item[0]) + '\' '
+          userGenres = userGenres + 'or Genre=\'' + str(rows[userIn][0]) + '\' '
         count = 1
 
   return userGenres
@@ -59,10 +60,13 @@ def userRecGenres():
 def gameRecommendationUser():
   userGenres = userRecGenres()
 
+  print(userGenres)
   if not userGenres:
     userGenres = " Genre=\'Action\' "
 
-  cur.execute('select Title, Rating, Price from app_id_info natural join games_genres where Type=\'game\' and ' + userGenres +' order by Rating desc limit 10')
+  query = 'select Title, Rating, Price from app_id_info natural join games_genres where Type=\'game\' and ' + userGenres +' order by Rating desc limit 10'
+  print(query)
+  cur.execute(query)
   rows = cur.fetchall()
   titles = []
   ratings = []
@@ -73,7 +77,7 @@ def gameRecommendationUser():
     ratings.append(rating)
     prices.append(price)
 
-  showGraphBar(title,rating, title="Recommended Games", tX="Game Titles", tY="Rating", subT="2016", heightSpacing=1.05, price=prices)
+  showGraphBar(titles,ratings, title="Recommended Games", tX="Game Titles", tY="Rating", subT="2016", heightSpacing=1.05, price=prices)
 
 
 
@@ -173,8 +177,9 @@ def showGraphBar(x,y, title, tX, tY, subT, heightSpacing, price):
     height = rect.get_height() - 4
     ax.text(rect.get_x() + rect.get_width() / 2., heightSpacing * height,'%d' % int(height),ha='center', va='bottom')
     if not (price is None):
-      ax.text(rect.get_x() + rect.get_width() / 2., 1, '%d' % int(height), ha='center',
-              va='bottom')
+      ax.text(rect.get_x() + rect.get_width() / 2., 1, '%d' % int(price[count]), ha='center',va='bottom')
+      count = count + 1
+
 
 
   if x.size > 1:
