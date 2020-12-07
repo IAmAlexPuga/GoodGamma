@@ -20,7 +20,7 @@
       <x>0</x>
       <y>0</y>
       <width>1161</width>
-      <height>801</height>
+      <height>811</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -1232,7 +1232,7 @@ background-color:rgba(0, 0, 0, 0)</string>
        <bool>false</bool>
       </property>
      </widget>
-     <widget class="QComboBox" name="priceList_2">
+     <widget class="QComboBox" name="multiList">
       <property name="geometry">
        <rect>
         <x>240</x>
@@ -1284,7 +1284,7 @@ background-color:rgba(0, 0, 0, 0)</string>
      <zorder>priceList</zorder>
      <zorder>label_3</zorder>
      <zorder>graphicsView_11</zorder>
-     <zorder>priceList_2</zorder>
+     <zorder>multiList</zorder>
      <zorder>label_4</zorder>
     </widget>
     <widget class="QGroupBox" name="BusinessGroup">
@@ -2042,7 +2042,7 @@ background-color: rgb(0, 0, 0, 0);</string>
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>60</y>
+        <y>100</y>
         <width>311</width>
         <height>171</height>
        </rect>
@@ -2145,37 +2145,11 @@ background-color: rgb(0, 0, 0, 0);</string>
        <bool>false</bool>
       </property>
      </widget>
-     <widget class="QTableWidget" name="topCat">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>80</y>
-        <width>291</width>
-        <height>141</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(200, 200, 200);
-font: 10pt &quot;Lucida Sans&quot;;</string>
-      </property>
-      <attribute name="horizontalHeaderStretchLastSection">
-       <bool>true</bool>
-      </attribute>
-      <attribute name="verticalHeaderVisible">
-       <bool>false</bool>
-      </attribute>
-      <attribute name="verticalHeaderDefaultSectionSize">
-       <number>18</number>
-      </attribute>
-      <attribute name="verticalHeaderMinimumSectionSize">
-       <number>18</number>
-      </attribute>
-     </widget>
      <widget class="QLabel" name="label_13">
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>55</y>
+        <y>95</y>
         <width>161</width>
         <height>31</height>
        </rect>
@@ -2188,19 +2162,24 @@ background-color: rgb(0, 0, 0, 0);</string>
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Game Recommendations&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
-     <widget class="QListWidget" name="singGen">
+     <widget class="QListWidget" name="revList">
       <property name="geometry">
        <rect>
-        <x>340</x>
-        <y>75</y>
-        <width>91</width>
+        <x>330</x>
+        <y>80</y>
+        <width>111</width>
         <height>21</height>
        </rect>
       </property>
       <property name="styleSheet">
        <string notr="true">background-color: rgb(200, 200, 200);
-color:white;
-font: 8pt &quot;Lucida Sans&quot;;</string>
+font: 10pt &quot;Lucida Sans&quot;;</string>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
       </property>
       <property name="autoScroll">
        <bool>false</bool>
@@ -2210,9 +2189,9 @@ font: 8pt &quot;Lucida Sans&quot;;</string>
       <property name="geometry">
        <rect>
         <x>330</x>
-        <y>60</y>
+        <y>30</y>
         <width>111</width>
-        <height>171</height>
+        <height>201</height>
        </rect>
       </property>
       <property name="palette">
@@ -2313,19 +2292,24 @@ font: 8pt &quot;Lucida Sans&quot;;</string>
        <bool>false</bool>
       </property>
      </widget>
-     <widget class="QListWidget" name="singType">
+     <widget class="QListWidget" name="playList">
       <property name="geometry">
        <rect>
-        <x>340</x>
-        <y>115</y>
-        <width>91</width>
+        <x>330</x>
+        <y>120</y>
+        <width>111</width>
         <height>21</height>
        </rect>
       </property>
       <property name="styleSheet">
        <string notr="true">background-color: rgb(200, 200, 200);
-color:white;
-font: 8pt &quot;Lucida Sans&quot;;</string>
+font: 10pt &quot;Lucida Sans&quot;;</string>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
       </property>
       <property name="autoScroll">
        <bool>false</bool>
@@ -2335,7 +2319,7 @@ font: 8pt &quot;Lucida Sans&quot;;</string>
       <property name="geometry">
        <rect>
         <x>340</x>
-        <y>50</y>
+        <y>135</y>
         <width>71</width>
         <height>31</height>
        </rect>
@@ -2352,7 +2336,7 @@ background-color: rgb(0, 0, 0, 0);</string>
       <property name="geometry">
        <rect>
         <x>330</x>
-        <y>100</y>
+        <y>105</y>
         <width>111</width>
         <height>10</height>
        </rect>
@@ -2373,10 +2357,10 @@ background-color: rgb(0, 0, 0, 0);</string>
      <widget class="QPushButton" name="applyButton">
       <property name="geometry">
        <rect>
-        <x>290</x>
-        <y>240</y>
-        <width>151</width>
-        <height>31</height>
+        <x>330</x>
+        <y>250</y>
+        <width>111</width>
+        <height>21</height>
        </rect>
       </property>
       <property name="palette">
@@ -2475,7 +2459,7 @@ background-color: rgb(0, 0, 0, 0);</string>
 font: 63 8pt &quot;Lucida Sans&quot;;</string>
       </property>
       <property name="text">
-       <string>CLEAR GAME STATISTICS</string>
+       <string>CLEAR</string>
       </property>
       <property name="checkable">
        <bool>false</bool>
@@ -2519,7 +2503,7 @@ font: 63 8pt &quot;Lucida Sans&quot;;</string>
       <property name="geometry">
        <rect>
         <x>330</x>
-        <y>140</y>
+        <y>145</y>
         <width>111</width>
         <height>10</height>
        </rect>
@@ -2537,19 +2521,24 @@ font: 63 8pt &quot;Lucida Sans&quot;;</string>
        <enum>Qt::Horizontal</enum>
       </property>
      </widget>
-     <widget class="QListWidget" name="singPrice">
+     <widget class="QListWidget" name="genList">
       <property name="geometry">
        <rect>
-        <x>340</x>
-        <y>155</y>
-        <width>91</width>
+        <x>330</x>
+        <y>160</y>
+        <width>111</width>
         <height>21</height>
        </rect>
       </property>
       <property name="styleSheet">
        <string notr="true">background-color: rgb(200, 200, 200);
-color:white;
-font: 8pt &quot;Lucida Sans&quot;;</string>
+font: 10pt &quot;Lucida Sans&quot;;</string>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
       </property>
       <property name="autoScroll">
        <bool>false</bool>
@@ -2559,7 +2548,7 @@ font: 8pt &quot;Lucida Sans&quot;;</string>
       <property name="geometry">
        <rect>
         <x>330</x>
-        <y>60</y>
+        <y>65</y>
         <width>111</width>
         <height>10</height>
        </rect>
@@ -2581,7 +2570,7 @@ font: 8pt &quot;Lucida Sans&quot;;</string>
       <property name="geometry">
        <rect>
         <x>340</x>
-        <y>90</y>
+        <y>175</y>
         <width>71</width>
         <height>31</height>
        </rect>
@@ -2591,14 +2580,14 @@ font: 8pt &quot;Lucida Sans&quot;;</string>
 background-color: rgb(0, 0, 0, 0);</string>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#000000;&quot;&gt;Type&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#000000;&quot;&gt;Downloads&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_27">
       <property name="geometry">
        <rect>
         <x>340</x>
-        <y>130</y>
+        <y>55</y>
         <width>71</width>
         <height>31</height>
        </rect>
@@ -2608,7 +2597,7 @@ background-color: rgb(0, 0, 0, 0);</string>
 background-color: rgb(0, 0, 0, 0);</string>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#000000;&quot;&gt;Price&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#000000;&quot;&gt;Revenue&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
      <widget class="QListWidget" name="titleList">
@@ -2616,7 +2605,7 @@ background-color: rgb(0, 0, 0, 0);</string>
        <rect>
         <x>10</x>
         <y>30</y>
-        <width>381</width>
+        <width>311</width>
         <height>21</height>
        </rect>
       </property>
@@ -2638,7 +2627,7 @@ font: 10pt &quot;Lucida Sans&quot;;</string>
       <property name="geometry">
        <rect>
         <x>330</x>
-        <y>180</y>
+        <y>185</y>
         <width>111</width>
         <height>10</height>
        </rect>
@@ -2656,29 +2645,73 @@ font: 10pt &quot;Lucida Sans&quot;;</string>
        <enum>Qt::Horizontal</enum>
       </property>
      </widget>
-     <widget class="QListWidget" name="incList_5">
+     <widget class="QListWidget" name="downList">
       <property name="geometry">
        <rect>
-        <x>340</x>
-        <y>195</y>
-        <width>91</width>
+        <x>330</x>
+        <y>200</y>
+        <width>111</width>
         <height>21</height>
        </rect>
       </property>
       <property name="styleSheet">
        <string notr="true">background-color: rgb(200, 200, 200);
-color:white;
-font: 8pt &quot;Lucida Sans&quot;;</string>
+font: 10pt &quot;Lucida Sans&quot;;</string>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
       </property>
       <property name="autoScroll">
        <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="Line" name="line_35">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>230</y>
+        <width>111</width>
+        <height>10</height>
+       </rect>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>10</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 150, 50);</string>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_28">
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>95</y>
+        <width>71</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 8pt &quot;Lucida Sans&quot;;
+background-color: rgb(0, 0, 0, 0);</string>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#000000;&quot;&gt;Play Time&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
      <widget class="Line" name="line_34">
       <property name="geometry">
        <rect>
         <x>330</x>
-        <y>220</y>
+        <y>25</y>
         <width>111</width>
         <height>10</height>
        </rect>
@@ -2694,6 +2727,93 @@ font: 8pt &quot;Lucida Sans&quot;;</string>
       </property>
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+     <widget class="QListWidget" name="rankList">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>40</y>
+        <width>111</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Lucida Sans</family>
+        <pointsize>10</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(200, 200, 200);
+font: 10pt &quot;Lucida Sans&quot;;</string>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="autoScroll">
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_29">
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>15</y>
+        <width>71</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 8pt &quot;Lucida Sans&quot;;
+background-color: rgb(0, 0, 0, 0);</string>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#000000;&quot;&gt;Overall Rank&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+     <widget class="QListWidget" name="statList">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>60</y>
+        <width>311</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(100, 100, 100);
+color: white;
+font: 8pt &quot;Lucida Sans&quot;;</string>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="autoScroll">
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QListWidget" name="topCat">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>120</y>
+        <width>291</width>
+        <height>141</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(200, 200, 200);
+font: 10pt &quot;Lucida Sans&quot;;</string>
       </property>
      </widget>
      <zorder>graphicsView_13</zorder>
@@ -2701,23 +2821,28 @@ font: 8pt &quot;Lucida Sans&quot;;</string>
      <zorder>graphicsView_7</zorder>
      <zorder>label_10</zorder>
      <zorder>graphicsView_10</zorder>
-     <zorder>topCat</zorder>
      <zorder>label_13</zorder>
-     <zorder>singGen</zorder>
-     <zorder>singType</zorder>
+     <zorder>revList</zorder>
+     <zorder>playList</zorder>
      <zorder>applyButton</zorder>
      <zorder>line_5</zorder>
      <zorder>line_29</zorder>
-     <zorder>singPrice</zorder>
+     <zorder>genList</zorder>
      <zorder>line_32</zorder>
      <zorder>label_20</zorder>
      <zorder>line_28</zorder>
-     <zorder>label_26</zorder>
      <zorder>label_27</zorder>
      <zorder>titleList</zorder>
      <zorder>line_33</zorder>
-     <zorder>incList_5</zorder>
+     <zorder>downList</zorder>
+     <zorder>label_26</zorder>
+     <zorder>line_35</zorder>
+     <zorder>label_28</zorder>
      <zorder>line_34</zorder>
+     <zorder>rankList</zorder>
+     <zorder>label_29</zorder>
+     <zorder>statList</zorder>
+     <zorder>topCat</zorder>
     </widget>
     <widget class="QGroupBox" name="searchGroup">
      <property name="geometry">

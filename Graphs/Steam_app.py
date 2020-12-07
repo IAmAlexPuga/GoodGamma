@@ -1,5 +1,6 @@
 import sys
 import psycopg2
+import pandas as pd
 
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QAction, QTableWidget,QTableWidgetItem,QVBoxLayout
 from PyQt5.QtCore import Qt
@@ -14,7 +15,16 @@ import matplotlib.pyplot as plt
 
 import numpy as np
 from textwrap import wrap
+import pickle
 
+# Create temp table for scores
+#CREATE TABLE temp_score
+#select a.appid, a.title, a.type, a.is_multiplayer, a.price, 
+#((a.rating*0.6 + (log(temp_purchased.purchases) / (datediff('2017/01/01 00:00:00', a.release_date)/365)* 0.3) + 
+#  (log(if(sum(g.playtime_forever) = 0, 1, sum(g.playtime_forever))) /(datediff('2017/01/01 00:00:00', a.release_date)/365)* 0.1))/70) as score
+#from games_2 g JOIN app_id_info a on g.appid = a.appid join temp_purchased on temp_purchased.appid = a.appid
+#group by appid
+#order by score desc;
 
 qtCreatorFile = "Steam_Data_App.ui" # Enter file here.
 # credentials 
@@ -24,7 +34,6 @@ sql_pass = 'password'
 sql_host = '127.0.0.1'
 sql_db = 'steam_data'
 sql_port = 3306
-
 
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
 
@@ -44,7 +53,7 @@ class Canvas(FigureCanvas):
         self.y = []
         self.move(633,395)
         self.avg = 0
-        self.show()        
+        self.show()  
         
     # plot bar chart    
     def plot_chart(self):
@@ -63,7 +72,7 @@ class Canvas(FigureCanvas):
             text_height = rect.get_height()
             self.ax.text(rect.get_x() + rect.get_width() / 2., self.heightSpacing * height,'%d' % int(text_height),ha='center', va='bottom', color=((0,0,0)), size=6)
             if not (self.price is None):
-                self.ax.text(rect.get_x() + rect.get_width() / 2., 1, '%d' % int(height), ha='center',
+                self.ax.text(rect.get_x() + rect.get_width() / 2., 5, '%d' % int(height), ha='center',
                         va='bottom')
     
     
@@ -104,8 +113,9 @@ class steam_App(QMainWindow):
         self.ui.game_table.itemSelectionChanged.connect(self.gameStat)
         self.ui.searchButton_2.clicked.connect(self.getGamesHelper)
         self.ui.removeButton.clicked.connect(self.clearFilter)
-        self.ui.searchButton.clicked.connect(self.searchGames)
-
+        self.ui.searchButton.clicked.connect(self.searchGames) 
+        self.co_mat()
+        
     # function to execute sql query
     def executeQuery(self, sql_str):
         try: 
@@ -145,10 +155,11 @@ class steam_App(QMainWindow):
         self.ui.outputTable.clear()
         self.ui.typeList.clear()
         self.ui.genreList.clear()
+        self.ui.priceList.clear()
+        self.ui.multiList.clear()
         op = self.ui.optionList.currentText()
         if (self.ui.optionList.currentIndex()>=0):
-            # show option lists for statistics search
-            if op == "All Games" or op == "Best Ratings" or op == "Price Points" or op == "Most Purchased":
+            if op == "All Games" or op == "Best Ratings" or op == "Price Points" or op == "Most Purchased" or op == 'Game Recommendation: User':
                 try:
                     results = self.executeQuery("select distinct Genre from games_genres;")
                     for row in results:
@@ -167,6 +178,10 @@ class steam_App(QMainWindow):
                     for item in results3:
                         self.ui.priceList.addItem(item)
                     self.ui.priceList.setCurrentIndex(-1)
+                    results4 = ("Yes", "No")
+                    for item in results4:
+                        self.ui.multiList.addItem(item)
+                    self.ui.multiList.setCurrentIndex(-1)
                     
                 except:
                     print("Query failed!")
@@ -178,7 +193,6 @@ class steam_App(QMainWindow):
     
     # helper class for games
     def getGamesHelper(self):
-        # store user option selections
         if (len(self.ui.genreList.selectedItems()) > 0):
             gen = self.ui.genreList.selectedItems()[0].text()
             genre_str = "and g.Genre = '" + gen + "' "
@@ -189,6 +203,14 @@ class steam_App(QMainWindow):
             type_str = "and a.Type = '" + type_sel + "' "
         elif (len(self.ui.typeList.selectedItems()) == 0):
             type_str = ""
+        if (self.ui.multiList.currentIndex() > -1):
+            multi = self.ui.multiList.currentText()
+            if multi == "Yes":
+                multi_str = "and a.Is_Multiplayer = '1' "
+            elif multi == "No":
+                multi_str = "and a.Is_Multiplayer = '0' "
+        elif (self.ui.multiList.currentIndex() == -1):
+            multi_str = ""
         
         if (self.ui.priceList.currentIndex() > -1):
             price = self.ui.priceList.currentText()
@@ -226,10 +248,11 @@ class steam_App(QMainWindow):
         elif (self.ui.priceList.currentIndex() == -1):
             price_str = ""
         
-        self.getGames(genre_str, type_str, price_str)
+        self.getGames(genre_str, type_str, price_str, multi_str)
         
     # function to get games from sql server based on options selected
-    def getGames(self, gen, type_sel, price):
+    def getGames(self, gen, type_sel, price, multi):
+        #self.ui.searchBar.setPlaceholderText("")
         self.ui.outputTable.clear()
         try: 
             criteria = self.ui.optionList.currentText()
@@ -240,6 +263,7 @@ class steam_App(QMainWindow):
                             gen + \
                             type_sel + \
                             price + \
+                            multi + \
                             "group by a.Title " + \
                             "order by a.Title;"
                 
@@ -254,6 +278,7 @@ class steam_App(QMainWindow):
                             gen + \
                             type_sel + \
                             price + \
+                            multi + \
                             "group by a.Title " + \
                             "order by a.Rating desc;"
                             
@@ -264,6 +289,7 @@ class steam_App(QMainWindow):
                             gen + \
                             type_sel + \
                             price + \
+                            multi + \
                             "group by a.Title " + \
                             "order by a.Rating desc " + \
                             "limit " + str(self.LIMIT) + ";"
@@ -284,13 +310,14 @@ class steam_App(QMainWindow):
             # group by app_id_info.appid 
             # order by purchases desc;
             elif criteria == "Most Purchased":
-                temp_str = "select a.title, a.purchases, a.Rating, a.Price, a.Type, g.Genre " + \
-                            "from temp_purchased a, games_genres g " + \
-                            "where a.appid = g.appid " + \
+                temp_str = "select t.title, t.purchases, t.Rating, a.Price, a.Type, g.Genre " + \
+                            "from temp_purchased t join games_genres g on t.appid = g.appid " + \
+                            "join app_id_info a on a.appid = t.appid " + \
                             gen + \
                             type_sel + \
                             price + \
-                            "group by a.appid " + \
+                            multi + \
+                            "group by t.appid " + \
                             "order by purchases desc;"
                 
                 graph_str = "select a.title, a.purchases, a.Rating, a.Price, a.Type, g.Genre " + \
@@ -299,6 +326,7 @@ class steam_App(QMainWindow):
                             gen + \
                             type_sel + \
                             price + \
+                            multi + \
                             "group by a.appid " + \
                             "order by purchases desc " + \
                             "limit " + str(self.LIMIT) + ";"
@@ -316,6 +344,7 @@ class steam_App(QMainWindow):
                             gen + \
                             type_sel + \
                             price + \
+                            multi + \
                             'group by a.Price order by a.Price asc;'
                 
                 graph_str = 'select a.Price , count(a.Price) as numGamesPriced ' + \
@@ -325,10 +354,35 @@ class steam_App(QMainWindow):
                             gen + \
                             type_sel + \
                             price + \
+                            multi + \
                             'group by a.Price order by a.Price asc;'
 
                 results = self.executeQuery(temp_str)
                 self.insertGamesPrice(results, graph_str)
+                
+            elif criteria == "Game Recommendation: User":
+                temp_str = 'select a.title, a.Price , a.rating ' + \
+                            'from app_id_info a, games_genres g ' + \
+                            'where a.appid = g.appid ' + \
+                            gen + \
+                            type_sel + \
+                            price + \
+                            multi + \
+                            'group by a.title order by a.rating desc ' + \
+                            'limit 20;'
+                
+                graph_str = 'select a.title, a.Price , a.rating ' + \
+                            'from app_id_info a, games_genres g ' + \
+                            'where a.appid = g.appid ' + \
+                            gen + \
+                            type_sel + \
+                            price + \
+                            multi + \
+                            'group by a.title order by a.rating desc ' + \
+                            'limit 10;'
+
+                results = self.executeQuery(temp_str)
+                self.insertGamesUser(results, graph_str)
 
         except:
             pass
@@ -361,6 +415,8 @@ class steam_App(QMainWindow):
         
         except:
             print("Query 4 failed!")
+            #pass
+        #self.bestRating()
         
     # insert games purchased into table
     def insertGamesPurchased(self, results):
@@ -390,7 +446,9 @@ class steam_App(QMainWindow):
             self.ui.outputTable.setColumnWidth(5, 50)
         
         except:
-            print("Query 5 failed!")
+            print("Query 4 failed!")
+            #pass
+        #self.bestRating()
     
     # insert price points into table
     def insertGamesPrice(self, results, graph_str):
@@ -419,13 +477,43 @@ class steam_App(QMainWindow):
             self.pricePoints(graph_results)
             
         except:
-            print("Query 6 failed!")
+            print("Query 4 failed!")
+            
+    def insertGamesUser(self, results, graph_str):
+        try:
+            if (len(results) > 0):
+                style = "::section {""background-color: #f3f3f3; }"
+                self.ui.outputTable.horizontalHeader().setStyleSheet(style)
+                self.ui.outputTable.setColumnCount(len(results[0]))
+                self.ui.outputTable.setRowCount(len(results))
+                self.ui.outputTable.setHorizontalHeaderLabels(['Title', 'Price', 'Rating'])
+                currentRowCount = 0
+                for row in results:
+                    for colCount in range (0,len(results[0])):
+                        self.ui.outputTable.setItem(currentRowCount,colCount,QTableWidgetItem(str(row[colCount])))
+                    currentRowCount += 1
+                #self.ui.outputTable.resizeColumnsToContents()
+                
+            else:
+                self.ui.outputTable.setColumnCount(3)
+                self.ui.outputTable.setHorizontalHeaderLabels(['Title', 'Price', 'Rating'])
+            
+            self.ui.outputTable.setColumnWidth(0, 300)
+            self.ui.outputTable.setColumnWidth(1, 60)
+            self.ui.outputTable.setColumnWidth(2, 60)
+            
+            graph_results = self.executeQuery(graph_str)
+            self.userGraph(graph_results)
+            
+        except:
+            print("Query 4 failed!")
             
     # function for clear filter button
     def clearFilter(self):
         self.ui.genreList.clearSelection()
         self.ui.typeList.clearSelection()
         self.ui.priceList.setCurrentIndex(-1)
+        self.ui.multiList.setCurrentIndex(-1)
            
     # set up ratings graph
     def bestRating(self, results):
@@ -436,7 +524,6 @@ class steam_App(QMainWindow):
             names.append(name)
             ratings.append(rating)
         
-        # set up bar chart
         chart = Canvas(self)
         chart.title = "Best Rated Games"
         chart.xlabel = "Game Name"
@@ -445,7 +532,27 @@ class steam_App(QMainWindow):
         chart.x = names
         chart.y = ratings
         chart.plot_chart()
+    
+    def userGraph(self, results):
+        titles = []
+        ratings = []
+        prices = []
+
+        for (name, price, rating) in results:
+            titles.append(name)
+            ratings.append(rating)
+            prices.append(price)
         
+        chart = Canvas(self)
+        chart.title = "User Recommendations"
+        chart.xlabel = "Game Name"
+        chart.ylabel = "Rating"
+        chart.subtitle = "2016"
+        chart.x = titles
+        chart.y = ratings
+        #chart.price = prices
+        chart.plot_chart()
+    
     # set up most purhcased graph
     def mostPurchased(self, results):
         names = []
@@ -455,7 +562,6 @@ class steam_App(QMainWindow):
             names.append(name)
             purchases.append(purchase)
         
-        # set up bar chart
         chart = Canvas(self)
         chart.title = "Most Purchased Games"
         chart.xlabel = "Game Name"
@@ -480,7 +586,6 @@ class steam_App(QMainWindow):
             numItems += 1
             priceTotal += price
         
-        # set up scatterplot
         chart = Canvas(self)
         chart.title = "Game Price Points"
         chart.xlabel = "Prices"
@@ -490,6 +595,7 @@ class steam_App(QMainWindow):
         chart.y = counts
         chart.avg = priceTotal/numItems
         chart.scatterPlot()
+        #self.ui.mplWindow.setItem(chart)
     
     # game title search bar
     def searchGames(self):
@@ -533,13 +639,212 @@ class steam_App(QMainWindow):
             
             #self.ui.outputTable.setColumnWidth(0, 200)
         except:
-            print("failed")
+            print("fail")
           
     # game statitstic information
     def gameStat(self):
         self.ui.titleList.clear()
         curr_title = self.ui.game_table.selectedItems()[0].text()
         self.ui.titleList.addItem(curr_title)
+        self.ui.rankList.clear()
+        self.ui.statList.clear()
+        
+        
+        stat_str = "select t.title, t.price, t.type, t.is_multiplayer, t.score, row_number() over ( order by t.score desc) as 'RowNumber' " + \
+                    "from temp_score t, games_genres g " + \
+                    "where t.appid = g.appid " + \
+                    "group by t.title " + \
+                    "order by t.score desc;"
+  
+        try:
+            results = self.executeQuery(stat_str)
+            df = pd.DataFrame(results, columns=('title', 'price', 'type', 'multi', 'score', 'rank'))
+            temp = df[df['title']==curr_title]['rank'].to_string(index=False)
+            try: 
+                int(temp)
+                str(temp)    
+                temp = self.rankClean(temp)
+            except:
+                temp = '-'
+            self.ui.rankList.addItem(temp + " / " + str(len(df)))
+        except:
+            self.ui.rankList.addItem('NA')
+        
+        price = df[df['title']==curr_title]['price'].to_string(index=False)
+        if price == 'Series([], )':
+            price = 'NA'
+        else:
+            pass
+        
+        game_str = "Price: $" + price + " | "
+        
+        self.genreStat(curr_title, game_str)
+        self.playStat(curr_title)
+        self.gameRecs(curr_title)
+       
+    # rank by genre
+    def genreStat(self, title, game_str):
+        self.ui.genList.clear()
+        try:
+            gen_stat = self.executeQuery("select g.genre from app_id_info a, games_genres g where a.appid = g.appid and a.title = '" + title + "' LIMIT 1;")      
+        except:
+            gen_stat = []
+        if len(gen_stat) > 0:
+            genre = "and g.Genre = '" + gen_stat[0][0] + "' "
+        else:
+            genre = ""
+        gen_str = "select t.title, t.score, row_number() over ( order by t.score desc) as 'RowNumber' " + \
+                    "from (select t.title, t.score " + \
+                    "from temp_score t, games_genres g where t.appid = g.appid " + \
+                    genre + \
+                    ") t " + \
+                    "group by t.title " + \
+                    "order by t.score desc;;"
+                    
+        results = self.executeQuery(gen_str)
+        df = pd.DataFrame(results, columns=('title', 'score', 'rank'))
+        temp = df[df['title']==title]['rank'].to_string(index=False)
+        try: 
+            int(temp)
+            str(temp) 
+            temp = self.rankClean(temp)
+        except:
+            temp = '-'
+        self.ui.genList.addItem(temp + " / " + str(len(df)))
+        
+        game_str = "Genre: " + gen_stat[0][0] + " | " + game_str
+        self.revStat(title, game_str)
+        
+    # rank by revenue
+    def revStat(self, title, game_str):
+        self.ui.revList.clear()
+        rev_stat = self.executeQuery("select title, (price*purchases) as rev, row_number() over ( order by price*purchases desc) as 'RowNumber' from temp_purchased group by title order by rev desc;")      
+
+        df = pd.DataFrame(rev_stat, columns=('title', 'revenue', 'rank'))
+        temp = df[df['title']==title]['rank'].to_string(index=False)
+        try: 
+            int(temp)
+            str(temp)  
+            temp = self.rankClean(temp)              
+        except:
+            temp = '-'
+        self.ui.revList.addItem(temp + " / " + str(len(df)))
+        
+        revenue = df[df['title']==title]['revenue'].to_string(index=False)
+        if revenue == 'Series([], )':
+            revenue = 'NA'
+        else:
+            pass
+        game_str = game_str + "Revenue: $" + revenue + " | "
+        self.ui.statList.addItem(game_str)
+    
+    # rank by playtime
+    def playStat(self, title):
+        self.ui.playList.clear()
+        play_stat = self.executeQuery("select title, playtime, row_number() over ( order by playtime desc) as 'RowNumber' from temp_score group by title order by playtime desc;")      
+
+        df = pd.DataFrame(play_stat, columns=('title', 'playtime', 'rank'))
+        temp = df[df['title']==title]['rank'].to_string(index=False)
+        try: 
+            int(temp)
+            str(temp) 
+            temp = self.rankClean(temp)               
+        except:
+            temp = '-'
+        self.ui.playList.addItem(temp + " / " + str(len(df)))
+        
+        pt = df[df['title']==title]['playtime'].to_string(index=False)
+        if pt == 'Series([], )':
+            pt = 'NA'
+        else:
+            pass
+        game_str = "Playtime: " + pt + " | "
+        
+        self.purchaseStat(title, game_str)
+    
+    # rank by downloads
+    def purchaseStat(self, title, game_str):
+        self.ui.downList.clear()
+        down_stat = self.executeQuery("select title, purchases, row_number() over ( order by purchases desc) as 'RowNumber' from temp_purchased group by title order by purchases desc;")      
+
+        df = pd.DataFrame(down_stat, columns=('title', 'purchases', 'rank'))
+        temp = df[df['title']==title]['rank'].to_string(index=False)
+        try: 
+            int(temp)
+            str(temp) 
+            temp = self.rankClean(temp)            
+        except:
+            temp = '-'
+        self.ui.downList.addItem(temp + " / " + str(len(df)))
+        
+        pur = df[df['title']==title]['purchases'].to_string(index=False)
+        if pur == 'Series([], )':
+            pur = 'NA'
+        else:
+            pass
+        game_str = game_str + "Downloads: " + pur
+        self.ui.statList.addItem(game_str)
+        
+    # clean up rankings
+    def rankClean(self, rank):
+        if rank[-2:] == '11':
+            rank = rank + "th"
+        elif rank[-1] == '1':
+            rank = rank + "st"
+        elif rank[-2:] == '12':
+            rank = rank + "th"
+        elif rank[-1] == '2':
+            rank = rank + "nd"
+        elif rank[-2:] == '13':
+            rank = rank + "th"
+        elif rank[-1] == '3':
+            rank = rank + "rd"
+        else:
+            rank = rank + "th"
+        return rank
+        
+    def gameRecs(self, title):
+        self.ui.topCat.clear()
+        ls = "select appid from app_id_info where title = '" + title + "';"
+        results = self.executeQuery(ls)
+        #print(results[0][0])
+        
+        recs = self.recommendations(results[0][0])
+        title_list = []
+        for game in recs:
+            results = self.executeQuery("select title from app_id_info where appid = '" + str(game) + "';")    
+            title_list.append(results[0][0])
+        
+        for item in title_list:
+            self.ui.topCat.addItem(item)
+        #print(title_list)
+        
+        
+        
+        return
+            
+    def recommendations(self, appid):
+    
+        indices = pd.Series(self.df.index)
+        
+        recommended = []
+        idx = indices[indices == appid].index[0]
+        
+        score_series = pd.Series(self.cosine_sim[idx]).sort_values(ascending=False)
+        
+        top_15 = list(score_series.iloc[0:14].index)
+        for i in top_15:
+            recommended.append(list(self.df.index)[i])
+        
+        if appid in recommended:
+            recommended.remove(appid)
+        else: 
+            pass
+        return recommended
+    
+    def co_mat(self):
+        self.cosine_sim = pd.read_pickle(r'co_sim')
+        self.df = pd.read_pickle('final_df_bag', compression='infer')
 
 if __name__ == "__main__":
     app = 0 #clear Qt instance in spyder
@@ -547,4 +852,3 @@ if __name__ == "__main__":
     window = steam_App()
     window.show()
     sys.exit(app.exec_())
-
