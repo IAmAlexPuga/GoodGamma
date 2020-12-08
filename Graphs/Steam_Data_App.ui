@@ -1264,6 +1264,243 @@ background-color:rgba(0, 0, 0, 0)</string>
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Multiplayer&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
+     <widget class="QGraphicsView" name="busi_pan">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>90</y>
+        <width>381</width>
+        <height>251</height>
+       </rect>
+      </property>
+      <property name="palette">
+       <palette>
+        <active>
+         <colorrole role="Button">
+          <brush brushstyle="SolidPattern">
+           <color alpha="0">
+            <red>0</red>
+            <green>0</green>
+            <blue>0</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Base">
+          <brush brushstyle="NoBrush">
+           <color alpha="255">
+            <red>0</red>
+            <green>0</green>
+            <blue>0</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Window">
+          <brush brushstyle="SolidPattern">
+           <color alpha="0">
+            <red>0</red>
+            <green>0</green>
+            <blue>0</blue>
+           </color>
+          </brush>
+         </colorrole>
+        </active>
+        <inactive>
+         <colorrole role="Button">
+          <brush brushstyle="SolidPattern">
+           <color alpha="0">
+            <red>0</red>
+            <green>0</green>
+            <blue>0</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Base">
+          <brush brushstyle="NoBrush">
+           <color alpha="255">
+            <red>0</red>
+            <green>0</green>
+            <blue>0</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Window">
+          <brush brushstyle="SolidPattern">
+           <color alpha="0">
+            <red>0</red>
+            <green>0</green>
+            <blue>0</blue>
+           </color>
+          </brush>
+         </colorrole>
+        </inactive>
+        <disabled>
+         <colorrole role="Button">
+          <brush brushstyle="SolidPattern">
+           <color alpha="0">
+            <red>0</red>
+            <green>0</green>
+            <blue>0</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Base">
+          <brush brushstyle="NoBrush">
+           <color alpha="255">
+            <red>0</red>
+            <green>0</green>
+            <blue>0</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Window">
+          <brush brushstyle="SolidPattern">
+           <color alpha="0">
+            <red>0</red>
+            <green>0</green>
+            <blue>0</blue>
+           </color>
+          </brush>
+         </colorrole>
+        </disabled>
+       </palette>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background: transparent;</string>
+      </property>
+      <property name="inputMethodHints">
+       <set>Qt::ImhNone</set>
+      </property>
+      <property name="interactive">
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QListWidget" name="busi_gen">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>120</y>
+        <width>171</width>
+        <height>161</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background: transparent;
+font: 10pt &quot;Lucida Sans&quot;;</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="gen_lab">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>90</y>
+        <width>141</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 8pt &quot;Lucida Sans&quot;;
+background-color:rgba(0, 0, 0, 0)</string>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="gen_lab2">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>90</y>
+        <width>141</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 8pt &quot;Lucida Sans&quot;;
+background-color:rgba(0, 0, 0, 0)</string>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+     <widget class="QListWidget" name="busi_gen_2">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>120</y>
+        <width>171</width>
+        <height>161</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background: transparent;</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="rev_lab_games">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>280</y>
+        <width>171</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 8pt &quot;Lucida Sans&quot;;
+background: transparent;
+color: transparent;</string>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="rev_lab2">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>280</y>
+        <width>171</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 8pt &quot;Lucida Sans&quot;;
+background-color:rgba(0, 0, 0, 0)</string>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+     <widget class="QListWidget" name="rev_games">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>310</y>
+        <width>171</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background: transparent;
+font: 10pt &quot;Lucida Sans&quot;;</string>
+      </property>
+     </widget>
+     <widget class="QListWidget" name="rev_dlc">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>310</y>
+        <width>171</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background: transparent;
+font: 10pt &quot;Lucida Sans&quot;;</string>
+      </property>
+     </widget>
      <zorder>graphicsView_5</zorder>
      <zorder>graphicsView_2</zorder>
      <zorder>graphicsView</zorder>
@@ -1286,6 +1523,15 @@ background-color:rgba(0, 0, 0, 0)</string>
      <zorder>graphicsView_11</zorder>
      <zorder>multiList</zorder>
      <zorder>label_4</zorder>
+     <zorder>busi_pan</zorder>
+     <zorder>gen_lab</zorder>
+     <zorder>gen_lab2</zorder>
+     <zorder>rev_lab2</zorder>
+     <zorder>rev_lab_games</zorder>
+     <zorder>rev_dlc</zorder>
+     <zorder>rev_games</zorder>
+     <zorder>busi_gen_2</zorder>
+     <zorder>busi_gen</zorder>
     </widget>
     <widget class="QGroupBox" name="BusinessGroup">
      <property name="geometry">
@@ -1310,7 +1556,7 @@ border: 0px </string>
         <x>20</x>
         <y>40</y>
         <width>571</width>
-        <height>301</height>
+        <height>361</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -1460,7 +1706,7 @@ background-color: rgb(0, 0, 0, 0);</string>
         <x>10</x>
         <y>30</y>
         <width>591</width>
-        <height>321</height>
+        <height>381</height>
        </rect>
       </property>
       <property name="palette">
@@ -1559,262 +1805,6 @@ background-color: rgb(0, 0, 0, 0);</string>
       </property>
       <property name="interactive">
        <bool>false</bool>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="applySortButton">
-      <property name="geometry">
-       <rect>
-        <x>500</x>
-        <y>370</y>
-        <width>101</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="palette">
-       <palette>
-        <active>
-         <colorrole role="Button">
-          <brush brushstyle="SolidPattern">
-           <color alpha="255">
-            <red>255</red>
-            <green>150</green>
-            <blue>50</blue>
-           </color>
-          </brush>
-         </colorrole>
-         <colorrole role="Base">
-          <brush brushstyle="SolidPattern">
-           <color alpha="255">
-            <red>255</red>
-            <green>150</green>
-            <blue>50</blue>
-           </color>
-          </brush>
-         </colorrole>
-         <colorrole role="Window">
-          <brush brushstyle="SolidPattern">
-           <color alpha="255">
-            <red>255</red>
-            <green>150</green>
-            <blue>50</blue>
-           </color>
-          </brush>
-         </colorrole>
-        </active>
-        <inactive>
-         <colorrole role="Button">
-          <brush brushstyle="SolidPattern">
-           <color alpha="255">
-            <red>255</red>
-            <green>150</green>
-            <blue>50</blue>
-           </color>
-          </brush>
-         </colorrole>
-         <colorrole role="Base">
-          <brush brushstyle="SolidPattern">
-           <color alpha="255">
-            <red>255</red>
-            <green>150</green>
-            <blue>50</blue>
-           </color>
-          </brush>
-         </colorrole>
-         <colorrole role="Window">
-          <brush brushstyle="SolidPattern">
-           <color alpha="255">
-            <red>255</red>
-            <green>150</green>
-            <blue>50</blue>
-           </color>
-          </brush>
-         </colorrole>
-        </inactive>
-        <disabled>
-         <colorrole role="Button">
-          <brush brushstyle="SolidPattern">
-           <color alpha="255">
-            <red>255</red>
-            <green>150</green>
-            <blue>50</blue>
-           </color>
-          </brush>
-         </colorrole>
-         <colorrole role="Base">
-          <brush brushstyle="SolidPattern">
-           <color alpha="255">
-            <red>255</red>
-            <green>150</green>
-            <blue>50</blue>
-           </color>
-          </brush>
-         </colorrole>
-         <colorrole role="Window">
-          <brush brushstyle="SolidPattern">
-           <color alpha="255">
-            <red>255</red>
-            <green>150</green>
-            <blue>50</blue>
-           </color>
-          </brush>
-         </colorrole>
-        </disabled>
-       </palette>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(255, 150, 50);
-font: 63 8pt &quot;Lucida Sans&quot;;</string>
-      </property>
-      <property name="text">
-       <string>APPLY</string>
-      </property>
-      <property name="checkable">
-       <bool>false</bool>
-      </property>
-      <property name="default">
-       <bool>false</bool>
-      </property>
-      <property name="flat">
-       <bool>false</bool>
-      </property>
-     </widget>
-     <widget class="QGraphicsView" name="graphicsView_12">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>360</y>
-        <width>481</width>
-        <height>51</height>
-       </rect>
-      </property>
-      <property name="palette">
-       <palette>
-        <active>
-         <colorrole role="Button">
-          <brush brushstyle="SolidPattern">
-           <color alpha="255">
-            <red>100</red>
-            <green>100</green>
-            <blue>100</blue>
-           </color>
-          </brush>
-         </colorrole>
-         <colorrole role="Base">
-          <brush brushstyle="SolidPattern">
-           <color alpha="255">
-            <red>100</red>
-            <green>100</green>
-            <blue>100</blue>
-           </color>
-          </brush>
-         </colorrole>
-         <colorrole role="Window">
-          <brush brushstyle="SolidPattern">
-           <color alpha="255">
-            <red>100</red>
-            <green>100</green>
-            <blue>100</blue>
-           </color>
-          </brush>
-         </colorrole>
-        </active>
-        <inactive>
-         <colorrole role="Button">
-          <brush brushstyle="SolidPattern">
-           <color alpha="255">
-            <red>100</red>
-            <green>100</green>
-            <blue>100</blue>
-           </color>
-          </brush>
-         </colorrole>
-         <colorrole role="Base">
-          <brush brushstyle="SolidPattern">
-           <color alpha="255">
-            <red>100</red>
-            <green>100</green>
-            <blue>100</blue>
-           </color>
-          </brush>
-         </colorrole>
-         <colorrole role="Window">
-          <brush brushstyle="SolidPattern">
-           <color alpha="255">
-            <red>100</red>
-            <green>100</green>
-            <blue>100</blue>
-           </color>
-          </brush>
-         </colorrole>
-        </inactive>
-        <disabled>
-         <colorrole role="Button">
-          <brush brushstyle="SolidPattern">
-           <color alpha="255">
-            <red>100</red>
-            <green>100</green>
-            <blue>100</blue>
-           </color>
-          </brush>
-         </colorrole>
-         <colorrole role="Base">
-          <brush brushstyle="SolidPattern">
-           <color alpha="255">
-            <red>100</red>
-            <green>100</green>
-            <blue>100</blue>
-           </color>
-          </brush>
-         </colorrole>
-         <colorrole role="Window">
-          <brush brushstyle="SolidPattern">
-           <color alpha="255">
-            <red>100</red>
-            <green>100</green>
-            <blue>100</blue>
-           </color>
-          </brush>
-         </colorrole>
-        </disabled>
-       </palette>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(100, 100, 100);</string>
-      </property>
-      <property name="interactive">
-       <bool>false</bool>
-      </property>
-     </widget>
-     <widget class="QComboBox" name="sortList">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>380</y>
-        <width>461</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(200, 200, 200);
-font: 10pt &quot;Lucida Sans&quot;;</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_15">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>360</y>
-        <width>251</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">font: 12pt &quot;MS Shell Dlg 2&quot;;
-font: 10pt &quot;Lucida Sans&quot;;
-background-color: rgb(0, 0, 0, 0);</string>
-      </property>
-      <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Sort By:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
      <widget class="Line" name="line">
@@ -1845,44 +1835,11 @@ background-color: rgb(0, 0, 0, 0);</string>
        <enum>Qt::Horizontal</enum>
       </property>
      </widget>
-     <widget class="Line" name="line_4">
-      <property name="geometry">
-       <rect>
-        <x>80</x>
-        <y>370</y>
-        <width>401</width>
-        <height>3</height>
-       </rect>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>3</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>16777215</width>
-        <height>3</height>
-       </size>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(255, 150, 50)</string>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
      <zorder>graphicsView_9</zorder>
      <zorder>graphicsView_6</zorder>
      <zorder>outputTable</zorder>
      <zorder>label_9</zorder>
-     <zorder>applySortButton</zorder>
-     <zorder>graphicsView_12</zorder>
-     <zorder>sortList</zorder>
-     <zorder>label_15</zorder>
      <zorder>line</zorder>
-     <zorder>line_4</zorder>
     </widget>
     <widget class="QGroupBox" name="StatGroup">
      <property name="geometry">

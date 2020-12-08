@@ -35,6 +35,7 @@ sql_host = '127.0.0.1'
 sql_db = 'steam_data'
 sql_port = 3306
 
+
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
 
 # class for matplotlib graphs
@@ -114,7 +115,8 @@ class steam_App(QMainWindow):
         self.ui.searchButton_2.clicked.connect(self.getGamesHelper)
         self.ui.removeButton.clicked.connect(self.clearFilter)
         self.ui.searchButton.clicked.connect(self.searchGames) 
-        self.co_mat()
+        self.cosine_sim = pd.read_pickle(r'co_sim')
+        self.df = pd.read_pickle('final_df_bag', compression='infer')
         
     # function to execute sql query
     def executeQuery(self, sql_str):
@@ -157,9 +159,26 @@ class steam_App(QMainWindow):
         self.ui.genreList.clear()
         self.ui.priceList.clear()
         self.ui.multiList.clear()
+        self.ui.busi_gen.clear()
+        self.ui.busi_gen_2.clear()
+        self.ui.rev_games.clear()
+        self.ui.rev_dlc.clear()
         op = self.ui.optionList.currentText()
         if (self.ui.optionList.currentIndex()>=0):
             if op == "All Games" or op == "Best Ratings" or op == "Price Points" or op == "Most Purchased" or op == 'Game Recommendation: User':
+                self.ui.busi_pan.setStyleSheet("background: transparent")
+                self.ui.busi_gen.setStyleSheet("background: transparent")
+                self.ui.busi_gen_2.setStyleSheet("background: transparent")
+                self.ui.rev_games.setStyleSheet("background: transparent")
+                self.ui.rev_dlc.setStyleSheet("background: transparent")
+                self.ui.gen_lab.setText("")
+                self.ui.gen_lab2.setText("")
+                self.ui.rev_lab_games.setText("")
+                self.ui.rev_lab2.setText("")
+                self.ui.gen_lab.setStyleSheet("background: transparent")
+                self.ui.gen_lab2.setStyleSheet("background: transparent")
+                self.ui.rev_lab_games.setStyleSheet("background: transparent")
+                self.ui.rev_lab2.setStyleSheet("background: transparent")
                 try:
                     results = self.executeQuery("select distinct Genre from games_genres;")
                     for row in results:
@@ -185,7 +204,22 @@ class steam_App(QMainWindow):
                     
                 except:
                     print("Query failed!")
-
+            elif op == 'Game Recommendation: Business':
+                self.ui.busi_pan.setStyleSheet("background-color: rgb(100,100,100)")
+                self.ui.busi_gen.setStyleSheet("background: rgb(200,200,200)")
+                self.ui.busi_gen_2.setStyleSheet("background: rgb(200,200,200)")
+                self.ui.rev_games.setStyleSheet("background: rgb(200,200,200)")
+                self.ui.rev_dlc.setStyleSheet("background: rgb(200,200,200)")
+                self.ui.gen_lab.setText("Genres in Top 10 Games")
+                self.ui.gen_lab.setStyleSheet("color: white; background: rgb(100,100,100); font: 8pt 'Lucida Sans';")
+                self.ui.gen_lab2.setText("Genres in Top 10 DLCs")
+                self.ui.gen_lab2.setStyleSheet("color: white; background: rgb(100,100,100); font: 8pt 'Lucida Sans';")
+                self.ui.rev_lab_games.setText("Revenue from Top 10 Games:")
+                self.ui.rev_lab_games.setStyleSheet("color: white; background: rgb(100,100,100); font: 8pt 'Lucida Sans';")
+                self.ui.rev_lab2.setText("Revenue from Top 10 DLCs:")
+                self.ui.rev_lab2.setStyleSheet("color: white; background: rgb(100,100,100); font: 8pt 'Lucida Sans';")
+                self.getBusiRecs()
+                
             else:
                 pass
         else:
@@ -387,6 +421,55 @@ class steam_App(QMainWindow):
         except:
             pass
     
+    def getBusiRecs(self):
+        dlc_str = "select appid, price*purchases as rev from temp_purchased where type = 'dlc' group by appid order by rev desc limit 10;"
+        game_str = "select appid, price*purchases as rev from temp_purchased where type = 'game' group by appid order by rev desc limit 10;"
+    
+        dlc_gen = self.executeQuery(dlc_str)
+        game_gen = self.executeQuery(game_str)
+        dlc_total = 0
+        game_total = 0
+        gz_gen = []
+        dl_gen = []
+        tot_gen = []
+        tot_dlc_gen = []
+        
+        for i, j in dlc_gen:
+            dlc_total = dlc_total + j
+            dl_gen.append(i)
+        for i, j in game_gen:
+            game_total = game_total + j
+            gz_gen.append(i)
+        
+        for x in gz_gen:
+            z = self.executeQuery("select genre from games_genres where appid = '" + str(x) + "';")
+            for p in z:
+                if p[0] not in tot_gen:
+                    tot_gen.append(p[0])
+
+        for x in dl_gen:
+            z = self.executeQuery("select genre from games_genres where appid = '" + str(x) + "';")
+            for p in z:
+                if p[0] not in tot_dlc_gen:
+                    tot_dlc_gen.append(p[0])
+
+        id_list = dl_gen + gz_gen
+        all_game = []
+        for x in id_list:
+            out_games = self.executeQuery("select title, rating, type, price*purchases from temp_purchased where appid = '" + str(x) + "' group by title order by price*purchases desc;")
+            all_game.append(out_games[0])
+        
+        
+        self.ui.rev_games.addItem("$" + str(game_total))
+        self.ui.rev_dlc.addItem("$" + str(dlc_total))
+        for w in tot_gen:
+            self.ui.busi_gen.addItem(w)
+        for w in tot_dlc_gen:
+            self.ui.busi_gen_2.addItem(w)
+        self.insertBusiRec(all_game)
+        self.graphBusi(tot_gen + tot_dlc_gen)
+        #print(dl_gen)
+    
     # insert all games into table
     def insertGames(self, results):
         try:
@@ -417,6 +500,35 @@ class steam_App(QMainWindow):
             print("Query 4 failed!")
             #pass
         #self.bestRating()
+        
+    def insertBusiRec(self, results):
+        try:
+            if (len(results) > 0):
+                style = "::section {""background-color: #f3f3f3; }"
+                self.ui.outputTable.horizontalHeader().setStyleSheet(style)
+                self.ui.outputTable.setColumnCount(len(results[0]))
+                self.ui.outputTable.setRowCount(len(results))
+                self.ui.outputTable.setHorizontalHeaderLabels(['Title', 'Rating', 'Type', 'Revenue'])
+                currentRowCount = 0
+                for row in results:
+                    for colCount in range (0,len(results[0])):
+                        self.ui.outputTable.setItem(currentRowCount,colCount,QTableWidgetItem(str(row[colCount])))
+                    currentRowCount += 1
+                #self.ui.outputTable.resizeColumnsToContents()
+                
+            else:
+                self.ui.outputTable.setColumnCount(4)
+                self.ui.outputTable.setHorizontalHeaderLabels(['Title', 'Rating', 'Type', 'Revenue'])
+            
+            self.ui.outputTable.setColumnWidth(0, 200)
+            self.ui.outputTable.setColumnWidth(1, 50)
+            self.ui.outputTable.setColumnWidth(2, 60)
+            self.ui.outputTable.setColumnWidth(3, 60)
+
+        
+        except:
+            print("Query 4 failed!")
+            #pass
         
     # insert games purchased into table
     def insertGamesPurchased(self, results):
@@ -570,8 +682,32 @@ class steam_App(QMainWindow):
         chart.x = names
         chart.y = purchases
         chart.plot_chart()
-        #self.ui.mplWindow.setItem(chart)    
-    
+        #self.ui.mplWindow.setItem(chart) 
+        
+    def graphBusi(self, results):
+        all_gen = []
+        for x in results:
+            if x not in all_gen:
+                all_gen.append(x)
+        
+        sums = []        
+        
+        for genre in all_gen:
+            some = self.executeQuery("select sum(t.purchases*t.price) from games_genres g, temp_purchased t where g.appid = t.appid and g.genre = '" + genre +"';")
+            sums.append(some[0][0])
+        
+        print(sums)
+        print(all_gen)
+        chart = Canvas(self)
+        chart.title = "Revenues per Genre"
+        chart.xlabel = "Genre"
+        chart.ylabel = "Revenue"
+        chart.subtitle = "2016"
+        chart.x = all_gen
+        chart.y = sums
+        chart.plot_chart()
+        #self.ui.mplWindow.setItem(chart) 
+        
     # set up price points scatterplot
     def pricePoints(self, results):
         prices = []
@@ -670,12 +806,14 @@ class steam_App(QMainWindow):
         except:
             self.ui.rankList.addItem('NA')
         
-        price = df[df['title']==curr_title]['price'].to_string(index=False)
-        if price == 'Series([], )':
+        try:
+            price = df[df['title']==curr_title]['price'].to_string(index=False)
+            if price == 'Series([], )':
+                price = 'NA'
+            else:
+                pass
+        except:
             price = 'NA'
-        else:
-            pass
-        
         game_str = "Price: $" + price + " | "
         
         self.genreStat(curr_title, game_str)
@@ -712,7 +850,10 @@ class steam_App(QMainWindow):
             temp = '-'
         self.ui.genList.addItem(temp + " / " + str(len(df)))
         
-        game_str = "Genre: " + gen_stat[0][0] + " | " + game_str
+        try:
+            game_str = "Genre: " + gen_stat[0][0] + " | " + game_str
+        except:
+            game_str = "NA"
         self.revStat(title, game_str)
         
     # rank by revenue
@@ -819,8 +960,6 @@ class steam_App(QMainWindow):
             self.ui.topCat.addItem(item)
         #print(title_list)
         
-        
-        
         return
             
     def recommendations(self, appid):
@@ -841,10 +980,6 @@ class steam_App(QMainWindow):
         else: 
             pass
         return recommended
-    
-    def co_mat(self):
-        self.cosine_sim = pd.read_pickle(r'co_sim')
-        self.df = pd.read_pickle('final_df_bag', compression='infer')
 
 if __name__ == "__main__":
     app = 0 #clear Qt instance in spyder
